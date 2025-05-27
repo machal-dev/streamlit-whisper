@@ -1,0 +1,61 @@
+# ▶ Python 기본
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyd
+*.pyo
+*.pkl
+*.db
+*.sqlite3
+
+# ▶ Virtual Environment
+env/
+venv/
+ENV/
+.venv/
+.Python
+
+# ▶ VSCode / PyCharm / IDE 설정
+.vscode/
+.idea/
+*.iml
+
+# ▶ Streamlit 임시 파일
+.streamlit/
+
+# ▶ OS 파일
+.DS_Store
+Thumbs.db
+
+# ▶ Jupyter/Notebook (있을 경우)
+.ipynb_checkpoints/
+
+# ▶ 로그 / 캐시
+*.log
+logs/
+cache/
+*.tmp
+
+# ▶ 모델 캐시 (Whisper 등)
+~/.cache/
+whisper_cache/
+whisper_model_cache/
+hub/
+
+# ▶ 환경 파일 (API 키 등)
+.env
+.env.*
+
+# ▶ 파이썬 빌드
+build/
+dist/
+*.spec
+
+# ▶ 기타
+*.wav
+*.mp3
+*.m4a
+*.zip
+*.tar.gz

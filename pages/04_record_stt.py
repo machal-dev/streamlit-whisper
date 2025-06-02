@@ -2,6 +2,7 @@ import whisper
 import sounddevice as sd
 from scipy.io.wavfile import write
 import tempfile
+import torch
 
 def record_audio(duration=5, samplerate=16000):
     print(f"🎤 {duration}초 동안 녹음을 시작합니다...")
@@ -15,7 +16,13 @@ def save_wav(audio, samplerate, path):
 
 def transcribe_with_whisper(wav_path):
     print("🧠 Whisper 모델 로딩 중...")
-    model = whisper.load_model("base")
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print("✔ 선택된 디바이스:", device)
+
+    model = whisper.load_model("base", device=device)
+
+    # 디바이스 확인
+    print("✔ 모델 디바이스:", next(model.parameters()).device)
     print("🔍 인식 중...")
     result = model.transcribe(wav_path, language="ko")
     return result["text"]

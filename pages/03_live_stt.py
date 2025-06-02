@@ -5,12 +5,19 @@ import tempfile
 from scipy.io.wavfile import write
 import os
 import streamlit as st
+import torch
 
 # 설정
 SAMPLE_RATE = 16000
 DURATION = 2
 
-model = whisper.load_model("base")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print("✔ 선택된 디바이스:", device)
+
+model = whisper.load_model("base", device=device)
+
+# 디바이스 확인
+print("✔ 모델 디바이스:", next(model.parameters()).device)
 
 st.title("🎙 실시간 Whisper STT (에러 없는 버전)")
 

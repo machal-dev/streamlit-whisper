@@ -1,6 +1,7 @@
 import streamlit as st
 import whisper
 import tempfile
+import torch
 
 st.title("🎤 음성 파일 업로드 → Whisper 텍스트 변환")
 
@@ -14,7 +15,14 @@ if uploaded_file is not None:
             tmpfile_path = tmpfile.name
 
         with st.spinner("Whisper 인식 중..."):
-            model = whisper.load_model("base")
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            print("✔ 선택된 디바이스:", device)
+
+            model = whisper.load_model("base", device=device)
+
+            # 디바이스 확인
+            print("✔ 모델 디바이스:", next(model.parameters()).device)
+
             result = model.transcribe(tmpfile_path, language="ko")
             st.success("📝 인식 결과:")
             st.write(result["text"])

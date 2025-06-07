@@ -1,94 +1,106 @@
-# 🎙️ Streamlit Whisper STT Demo
+# 🧠 fastapi-streamlit-stt
 
-Whisper + Streamlit 기반의 **유사 실시간 음성 인식(STT)** 웹앱입니다.  
-마이크 입력 또는 파일 업로드를 통해 음성을 텍스트로 변환하고, 향후 자막 생성·GPT 연동·TTS 등으로 확장 가능하도록 설계되었습니다.
-
----
-
-## 🚀 주요 기능
-
-- 🎧 **파일 업로드 음성 인식** (`.wav`, `.mp3` 등 지원)
-- 🎙️ **마이크 입력 기반 near-real-time transcription (진행 중)**
-- 📃 Whisper 기반 텍스트 출력 (한국어 포함 다국어 자동 인식)
-- 📂 결과 저장/다운로드, 향후 SRT 자막 출력 확장 고려
-- 🧱 실무형 구조: `pages/`, `modules/`, `static/` 분리 설계
+Whisper 기반 음성 인식, 영어 번역 및 GPT 분석 확장 가능한  
+**FastAPI + Streamlit 기반 음성 처리 프로젝트**입니다.
 
 ---
 
-## 🧠 기술 스택
+## 📦 주요 기능
 
-| 분야       | 기술/도구                    |
-|------------|------------------------------|
-| UI         | Streamlit                    |
-| 음성입력   | sounddevice, ffmpeg-python   |
-| 모델       | OpenAI Whisper               |
-| 언어       | Python 3.11                  |
-| 구조화     | 모듈 분리 / 페이지 기반 구성 |
+- 🎙️ 음성 파일 업로드 → Whisper로 텍스트 전사
+- 🌍 영어 번역 (Whisper translate 기능 활용)
+- 🖥️ Streamlit UI로 결과 확인
+- 🧠 GPT 분석 / 요약 기능 연동 예정
+- 🔊 TTS, 자막(SRT) 생성 등 확장 가능
 
 ---
 
-## 🗂️ 프로젝트 구조
+## 📁 프로젝트 구조
 
 ```
-streamlit-whisper/
-├─ app.py                      # Streamlit 메인 앱
-├─ requirements.txt            # 의존성 목록
-├─ .gitignore
-├─ data/
-│   └─ sample.csv              # 예제 입력 데이터
-├─ modules/
-│   └─ ai_utils.py             # Whisper 호출 유틸 함수
-├─ pages/
-│   ├─ 01_dashboard.py         # 대시보드 (탭 1)
-│   └─ 02_speech_to_text.py    # STT 메인 기능 탭
-├─ static/
-│   └─ logo.png                # 로고 등 정적 리소스
-```
+
+fastapi-streamlit-stt/
+├── app/               # Streamlit 프론트엔드
+│   ├── app.py
+│   ├── pages/
+│   └── static/
+├── backend/           # FastAPI 백엔드
+│   ├── main.py
+│   ├── routers/
+│   └── services/
+├── shared/            # 공용 유틸/모듈 (선택)
+├── .venv/             # 통합 가상환경
+├── requirements.txt
+└── README.md
+
+````
 
 ---
 
-## ⚙️ 실행 방법
+## ⚙️ 환경 설정
 
-1. **환경 구성**
+### 1. 가상환경 생성 및 패키지 설치
+
 ```bash
 python -m venv .venv
-source .venv/bin/activate       # Windows: .venv\Scripts\activate
+source .venv/bin/activate        # macOS/Linux
+.venv\Scripts\Activate.ps1       # Windows PowerShell
+
 pip install -r requirements.txt
-```
+````
 
-2. **FFmpeg 설치**
-   - macOS: `brew install ffmpeg`
-   - Windows: choco / zip 설치 후 PATH 등록
-   - Ubuntu: `sudo apt install ffmpeg`
+> `requirements.txt`에는 CPU-only 버전의 torch가 포함되어 있습니다.
 
-3. **앱 실행**
+---
+
+## ⚡ CUDA (GPU) 환경용 PyTorch 설치
+
+CUDA를 사용하는 환경에서는 아래 명령어로 GPU 지원 버전을 설치하세요:
+(CUDA 12.8 기준)
+
 ```bash
-streamlit run app.py
+pip install torch==2.7.0 torchvision==0.22.0 torchaudio==2.7.0 --index-url https://download.pytorch.org/whl/cu128
+```
+
+👉 [공식 PyTorch 설치 가이드 보기](https://pytorch.org/get-started/locally/)
+
+---
+
+## 🚀 실행
+
+### 1. FastAPI 백엔드 실행
+
+```bash
+uvicorn backend.main:app --reload
+```
+
+→ Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### 2. Streamlit 프론트 실행
+
+```bash
+streamlit run app/app.py
 ```
 
 ---
 
-## 📌 개발 중인 기능 (Work in Progress)
+## 🧠 향후 개발 예정 기능
 
-- [ ] 실시간 마이크 입력 → Chunk 기반 transcription 안정화
-- [ ] Whisper 추론 속도 개선 (faster-whisper 도입 가능성)
-- [ ] transcription 결과 SRT 변환 + 다운로드
-- [ ] OpenAI GPT 연동 → 대화 분석 / 요약
-- [ ] TTS(음성 합성) 연계로 텍스트 → 음성 변환
-
----
-
-## 🧪 테스트 및 로깅
-
-- 현재 `logs/` 디렉토리는 미사용 상태 (추후 세션별 로그 저장 설계 예정)
-- 개발자용 유틸 함수는 `modules/` 폴더 하위에 구성
+* [ ] Whisper 결과 기반 SRT 자막 자동 생성
+* [ ] GPT 요약/분석 기능 연동
+* [ ] 마이크 실시간 입력 처리 마무리
+* [ ] TTS(Text-to-Speech) 기능 확장
+* [ ] Docker 기반 배포 지원
 
 ---
 
-## 📄 라이선스
+## 🙋 사용 기술
 
-MIT License — 자유롭게 활용 가능하며, 인용 시 출처를 밝혀주세요 🙌
+* Python
+* FastAPI
+* Streamlit
+* Whisper
+* PyTorch
+* (향후) GPT-4 / OpenAI API
 
 ---
-
-> 문서 최종 업데이트: 2025-06-02

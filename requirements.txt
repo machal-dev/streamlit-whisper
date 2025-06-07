@@ -16,6 +16,9 @@ python-multipart
 streamlit
 requests
 
+# 🔐 Auth
+python-jose
+python-dotenv
+
 # ✨ (Optional) 유틸
-tqdm             # 진행 바(선택)
-python-dotenv    # .env 파일 관리용 (선택)
+tqdm             # 진행 바 등

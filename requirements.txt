@@ -20,4 +20,6 @@ pymysql
 cryptography
 
 tqdm
+
 passlib[bcrypt]
+pydantic[email]

@@ -1,24 +1,23 @@
-# ⚙️ Backend - FastAPI
 fastapi
 uvicorn
 
-# 🧠 Core AI - Whisper, Torch (기본 CPU 전용)
 openai-whisper
-torch           # GPU 환경에서는 별도 설치 가이드 참고
+torch
 torchaudio
 torchvision
 
-# 🎧 Audio & Uploads
 pydub
 python-multipart
 
-# 🌐 Frontend - Streamlit + API 통신
 streamlit
 requests
 
-# 🔐 Auth
 python-jose
 python-dotenv
 
-# ✨ (Optional) 유틸
-tqdm             # 진행 바 등
+sqlalchemy
+pymysql
+cryptography
+
+tqdm
+passlib[bcrypt]

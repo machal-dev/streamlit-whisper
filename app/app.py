@@ -41,8 +41,8 @@ def show_main_page():
 
 def show_login_page():
     st.title("🔐 로그인")
-    email = st.text_input("이메일", value="admin@example.com")
-    password = st.text_input("비밀번호", type="password", value="admin1234")
+    email = st.text_input("이메일", value="")
+    password = st.text_input("비밀번호", type="password", value="")
 
     if st.button("로그인"):
         try:

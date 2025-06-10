@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt
+from pydantic import EmailStr
 import os
 from dotenv import load_dotenv
 
@@ -16,7 +17,7 @@ admin_user = {
     "password": "admin1234"
 }
 
-def authenticate_user(email: str, password: str) -> bool:
+def authenticate_user(email: EmailStr, password: str) -> bool:
     return email == admin_user["email"] and password == admin_user["password"]
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:

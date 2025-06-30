@@ -23,3 +23,5 @@ tqdm
 
 passlib[bcrypt]
 pydantic[email]
+
+redis

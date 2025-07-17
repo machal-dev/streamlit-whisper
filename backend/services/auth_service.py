@@ -11,6 +11,7 @@ from passlib.hash import bcrypt
 
 from core.redis import redis_client
 from models.user import User
+import redis
 
 load_dotenv()
 
@@ -43,4 +44,21 @@ def create_session(user_id: int, expire_seconds: int = None) -> str:
         expire_seconds = ACCESS_TOKEN_EXPIRE_MINUTES * 60
     redis_key = f"session:{token}"
     redis_client.setex(redis_key, expire_seconds, str(user_id))
+    redis_client.eval()
+
+    r = redis.Redis(decode_responses=True)
+    # 키 설정
+    r.set("a", 10)
+    r.set("b", 20)
+
+    # Lua 스크립트: a + b
+    lua = """
+    local val1 = tonumber(redis.call('GET', KEYS[1]))
+    local val2 = tonumber(redis.call('GET', KEYS[2]))
+    return val1 + val2
+    """
+
+    result = r.eval(lua, 2, "a", "b")
+    print("결과:", result)  # 👉 결과: 30
+
     return token

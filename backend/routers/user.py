@@ -12,6 +12,7 @@ router = APIRouter()
 
 @router.get("/me", response_model=UserOut)
 def read_me(current_user=Depends(get_current_user)):
+    print("🔍 [DEBUG] read_me session_state:")
     return current_user
 
 

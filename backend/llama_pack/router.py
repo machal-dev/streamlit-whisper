@@ -1,12 +1,10 @@
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
-from services.llama_service import generate_text
+from backend.llama_pack.service import generate_text
 import logging
 
 logger = logging.getLogger(__name__)
-
 router = APIRouter()
-
 
 class PromptRequest(BaseModel):
     prompt: str = Field(..., description="사용자 프롬프트 (예: '삼국지를 요약해줘')")
@@ -15,8 +13,7 @@ class PromptRequest(BaseModel):
     do_sample: bool = Field(True, description="샘플링 여부")
     extract_after_answer: bool = Field(True, description="'답:' 이후만 추출할지 여부")
 
-
-@router.post("/llama/generate")
+@router.post("/generate")
 def llama_generate(req: PromptRequest):
     logger.info("🟦 [API] POST /llama/generate 요청 수신")
     logger.debug(f"[프롬프트] {req.prompt[:100]}...")

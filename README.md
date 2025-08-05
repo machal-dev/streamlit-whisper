@@ -72,7 +72,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=60
 ### 4. FastAPI 서버 실행
 
 ```bash
-uvicorn backend.main:app --reload
+uvicorn backend.main:frontend --reload
 ```
 
 * API 문서 확인: [http://localhost:8000/docs](http://localhost:8000/docs)
@@ -84,7 +84,7 @@ uvicorn backend.main:app --reload
 ### 5. Streamlit 앱 실행
 
 ```bash
-streamlit run app/app.py
+streamlit run frontend/frontend.py
 ```
 
 * 음성 파일 업로드 → STT 처리 결과 확인 가능

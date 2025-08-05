@@ -1,18 +1,10 @@
 from fastapi import FastAPI
-from routers import user, auth, stt, llama
-from fastapi.middleware.cors import CORSMiddleware
+from backend.llama_pack.router import router as llama_router
+from backend.whisper_pack.router import router as whisper_router
 
 app = FastAPI()
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["http://localhost:8501"],  # Streamlit 실행 포트
-#     allow_credentials=True,  # ← 이게 있어야 쿠키 허용됨!!
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-app.include_router(user.router)
-app.include_router(auth.router)
-app.include_router(stt.router)
-app.include_router(llama.router)
+# llama
+app.include_router(llama_router, prefix="/llama")
+# whisper
+app.include_router(whisper_router, prefix="/whisper")

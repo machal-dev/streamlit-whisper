@@ -1,37 +1,61 @@
-from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer
 import torch
+import logging
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 
-print("🟡 [LLaMA 서비스] 모델 초기화 시작...")
+logger = logging.getLogger(__name__)
 
-model_id = "meta-llama/Llama-2-7b-chat-hf"
+logger.info("🟡 [LLaMA 서비스] 모델 초기화 시작...")
 
-tokenizer = AutoTokenizer.from_pretrained(model_id)
+MODEL_ID = "meta-llama/Llama-2-7b-chat-hf"
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
 model = AutoModelForCausalLM.from_pretrained(
-    model_id,
+    MODEL_ID,
     torch_dtype=torch.float16,
     device_map="auto",
 )
 
-print("✅ [LLaMA 서비스] 모델 및 토크나이저 로딩 완료")
-
-# 텍스트 생성 파이프라인
 generator = pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
 )
 
-print("✅ [LLaMA 서비스] 파이프라인 준비 완료")
+logger.info("✅ [LLaMA 서비스] 모델 및 파이프라인 로딩 완료")
 
-def generate_text(prompt: str, max_new_tokens=64, temperature=0.7, do_sample=True) -> str:
-    print(f"🧠 [LLaMA] 프롬프트 수신: {prompt}")
+
+def generate_text(
+    prompt: str,
+    max_new_tokens: int = 64,
+    temperature: float = 0.7,
+    do_sample: bool = True,
+    system_prompt: str = None,
+    extract_after_answer: bool = True
+) -> str:
+    """
+    LLaMA 텍스트 생성
+    - prompt: 사용자 입력
+    - extract_after_answer: '답:' 이후만 추출할지 여부
+    """
+
+    logger.debug(f"[🧠 LLaMA] 프롬프트 수신:\n{prompt}")
+
+    final_prompt = prompt.strip()
+    if system_prompt:
+        final_prompt = system_prompt.strip() + "\n\n" + prompt.strip()
+
     outputs = generator(
-        prompt,
+        final_prompt,
         max_new_tokens=max_new_tokens,
         temperature=temperature,
         do_sample=do_sample
     )
 
     result = outputs[0]["generated_text"]
-    print(f"🟢 [LLaMA 서비스] 결과 생성 완료")
+
+    logger.debug("[🟢 LLaMA] 원본 응답:\n%s", result)
+
+    if extract_after_answer and "답:" in result:
+        result = result.split("답:", 1)[-1].strip()
+
     return result
